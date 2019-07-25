@@ -1,0 +1,8 @@
+cat <<EOF | kubectl create -f -
+apiVersion: multiclusterdns.kubefed.k8s.io/v1alpha1
+kind: Domain
+metadata:
+  name: vinnsl
+  namespace: kube-federation-system
+domain: example.com
+EOF

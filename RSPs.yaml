@@ -1,0 +1,76 @@
+cat <<EOF | kubectl create -f -
+apiVersion: scheduling.kubefed.k8s.io/v1alpha1
+kind: ReplicaSchedulingPreference
+metadata:
+  name: vinnsl-service
+  namespace: vinnsl
+spec:
+  targetKind: FederatedDeployment
+  totalReplicas: 10
+  clusters:
+    kubernetes-host: 
+      minReplicas: 1
+      maxReplicas: 3
+      weight: 1
+EOF
+---
+apiVersion: scheduling.kubefed.k8s.io/v1alpha1
+kind: ReplicaSchedulingPreference
+metadata:
+  name: vinnsl-storage-service
+  namespace: vinnsl
+spec:
+  targetKind: FederatedDeployment
+  totalReplicas: 10
+  clusters:
+    kubernetes-host: 
+      minReplicas: 1
+      maxReplicas: 3
+      weight: 1
+---
+apiVersion: scheduling.kubefed.k8s.io/v1alpha1
+kind: ReplicaSchedulingPreference
+metadata:
+  name: vinnsl-nn-worker
+  namespace: vinnsl
+spec:
+  targetKind: FederatedDeployment
+  totalReplicas: 10
+  clusters:
+    kubernetes-host: 
+      minReplicas: 1
+      maxReplicas: 3
+      weight: 1
+---
+apiVersion: scheduling.kubefed.k8s.io/v1alpha1
+kind: ReplicaSchedulingPreference
+metadata:
+  name: vinnsl-nn-ui-deploy
+  namespace: vinnsl
+spec:
+  targetKind: FederatedDeployment
+  totalReplicas: 10
+  clusters:
+    kubernetes-host: 
+      minReplicas: 1
+      maxReplicas: 3
+      weight: 1
+
+
+cat <<EOF | kubectl create -f -
+apiVersion: scheduling.kubefed.k8s.io/v1alpha1
+kind: HPASchedulingPreference
+metadata:
+  name: vinnsl-service
+  namespace: vinnsl
+spec:
+  Targetref:
+    apiversion: federation.k8s.io/v1alpha1
+    kind: DeploymentTemplate
+    name: php-apache
+  clusters:
+    kubernetes-host: 
+      minReplicas: 1
+      maxReplicas: 3
+      weight: 1
+EOF

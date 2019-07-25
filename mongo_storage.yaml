@@ -1,0 +1,70 @@
+cat <<EOF | kubectl create -f -
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongo-storage
+  namespace: vinnsl
+  labels:
+    name: mongo-storage
+spec:
+  ports:
+    - port: 27017
+      targetPort: 27017
+  clusterIP: None
+  selector:
+    role: mongo-storage
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongo-storage-0
+  namespace: vinnsl
+spec:
+  type: LoadBalancer
+  #externalTrafficPolicy: Local
+  selector:
+    statefulset.kubernetes.io/pod-name: mongo-storage-0
+  ports:
+  - protocol: TCP
+    port: 27017
+    targetPort: 27017
+---
+apiVersion: apps/v1beta1
+kind: StatefulSet
+metadata:
+  name: mongo-storage
+  namespace: vinnsl
+spec:
+  serviceName: "mongo-storage"
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        role: mongo-storage
+        environment: test
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+        - name: mongo
+          image: mongo
+          command:
+            - mongod
+            - "--bind_ip"
+            - 0.0.0.0
+            - "--noprealloc"
+          ports:
+            - containerPort: 27017
+          volumeMounts:
+            - name: mongo-files-persistent-storage
+              mountPath: /data/db
+        - name: mongo-sidecar
+          image: cvallance/mongo-k8s-sidecar
+          env:
+            - name: MONGO_SIDECAR_POD_LABELS
+              value: "role=mongo,environment=test"
+      volumes:
+        - name: mongo-files-persistent-storage
+          hostPath:
+            path: /tmp/fed-mongo-storage
+            type: Directory
+EOF
