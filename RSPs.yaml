@@ -1,4 +1,3 @@
-cat <<EOF | kubectl create -f -
 apiVersion: scheduling.kubefed.k8s.io/v1alpha1
 kind: ReplicaSchedulingPreference
 metadata:
@@ -12,7 +11,6 @@ spec:
       minReplicas: 1
       maxReplicas: 3
       weight: 1
-EOF
 ---
 apiVersion: scheduling.kubefed.k8s.io/v1alpha1
 kind: ReplicaSchedulingPreference
@@ -55,9 +53,7 @@ spec:
       minReplicas: 1
       maxReplicas: 3
       weight: 1
-
-
-cat <<EOF | kubectl create -f -
+---
 apiVersion: scheduling.kubefed.k8s.io/v1alpha1
 kind: HPASchedulingPreference
 metadata:
@@ -73,4 +69,3 @@ spec:
       minReplicas: 1
       maxReplicas: 3
       weight: 1
-EOF

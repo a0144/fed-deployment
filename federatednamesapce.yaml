@@ -1,4 +1,3 @@
-cat <<EOF | kubectl create -f -
 apiVersion: types.kubefed.k8s.io/v1beta1
 kind: FederatedNamespace
 metadata:
@@ -9,4 +8,3 @@ spec:
     clusters:
       - name: kubernetes-host
       - name: kubernetes-reserve
-EOF

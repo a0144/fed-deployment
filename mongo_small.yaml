@@ -1,8 +1,6 @@
 # add new mount host directory (clashes with non-federated mongo)
 # expose sts (headless service) with load balancer
 # add namespacing to sevices and sts
-
-cat <<EOF | kubectl create -f -
 apiVersion: v1
 kind: Service
 metadata:
@@ -55,8 +53,6 @@ spec:
             - mongod
             - "--bind_ip"
             - 0.0.0.0
-            - "--smallfiles"
-            - "--noprealloc"
           ports:
             - containerPort: 27017
           volumeMounts:
@@ -67,9 +63,10 @@ spec:
           env:
             - name: MONGO_SIDECAR_POD_LABELS
               value: "role=mongo,environment=test"
+      nodeSelector:
+        kubernetes.io/hostname: nn03
       volumes:
         - name: mongo-persistent-storage
           hostPath:
             path: /tmp/fed-mongo
             type: Directory
-EOF

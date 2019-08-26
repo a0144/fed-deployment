@@ -1,15 +1,12 @@
-                                            
-cat <<EOF | kubectl create -f -
 apiVersion: multiclusterdns.kubefed.k8s.io/v1alpha1
 kind: ServiceDNSRecord
-moetadata:
+metadata:
   name: mongo-0
   namespace: vinnsl
 spec:
   domainRef: vinnsl
   recordTTL: 300
 ---
-cat <<EOF | kubectl create -f -
 apiVersion: multiclusterdns.kubefed.k8s.io/v1alpha1
 kind: ServiceDNSRecord
 metadata:
@@ -18,9 +15,7 @@ metadata:
 spec:
   domainRef: vinnsl
   recordTTL: 300
-EOF
 ---
-cat <<EOF | kubectl create -f -
 apiVersion: multiclusterdns.kubefed.k8s.io/v1alpha1
 kind: ServiceDNSRecord
 metadata:
@@ -56,4 +51,3 @@ metadata:
 spec:
   domainRef: vinnsl
   recordTTL: 300
-EOF
